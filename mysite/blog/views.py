@@ -17,8 +17,8 @@ class PostListView(ListView):
     model = Post
 
     def get_queryset(self): ## lte == less than or equal to . -published_date = order by desc (most recent post comes first)
-        return Post.objects.filter(published_date__lte==timezone.now()).order_by('-published_date')
-
+        return Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')#     def get_queryset(self):
+        # return Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
 class PostDetailView(DetailView):
     model = Post
 
@@ -59,7 +59,7 @@ def post_publish(request, pk):
 @login_required
 def add_comment_to_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    if (request.method == 'Post'):
+    if (request.method == 'POST'):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
@@ -67,6 +67,7 @@ def add_comment_to_post(request, pk):
             comment.save()
             return redirect('post_detail', pk=post.pk)
     else:
+        print("InVALUD")
         form = CommentForm
     return render(request, 'blog/comment_form.html', {'form':form})
 
